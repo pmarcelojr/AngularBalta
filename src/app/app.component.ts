@@ -8,8 +8,9 @@ import { Todo } from 'src/models/todo.model';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  public mode: string = 'list';
   public todos: Todo[] = [];
-  public title: string = 'Minhas Tarefas';
+  public title: string = 'Lista de Tarefas';
   public form: FormGroup;
 
   constructor(private fb: FormBuilder) {
@@ -22,6 +23,10 @@ export class AppComponent {
     });
 
     this.load();
+  }
+
+  changeMode(mode: string) {
+    this.mode = mode;
   }
 
   add() {
@@ -57,10 +62,15 @@ export class AppComponent {
   save() {
     const data = JSON.stringify(this.todos);
     localStorage.setItem('todos', data);
+    this.mode='list';
   }
 
   load() {
     const data = localStorage.getItem('todos');
-    this.todos = JSON.parse(data);
+    if (data) {
+      this.todos = JSON.parse(data);
+    } else {
+      this.todos = [];
+    }
   }
 }
